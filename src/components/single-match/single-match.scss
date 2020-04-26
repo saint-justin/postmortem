@@ -1,0 +1,92 @@
+.match-wrapper{
+  // background-color: blue;
+  width: 100%;
+  height: 17vh;
+  padding: 0 64px;
+
+}
+
+.match-container{
+  background-color: $offwhite-light;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+
+  .success-indicator{
+    background-color: grey;
+    height: 17vh;
+    width: 32px;
+  }
+
+  .champ-icon{
+    height: 128px;
+  }
+}
+
+
+.match-chosen-spells{
+  display: flex;
+  flex-direction: row;
+
+  .match-masteries{
+    display: flex;
+    align-items: center;
+  }
+
+  .match-keystone{
+    width: 48px;
+    height: 48px;
+    background-color: black;
+    border-radius: 50%;
+  }
+
+  .match-secondary{
+    width: 32px;
+    background-color: black;
+    border-radius: 50%;
+    // position: relative;
+    // left: -10;
+    // top: 0;
+    display: float;
+    margin-left: -30%;
+    margin-bottom: -45%;
+    padding: 4px;
+  }
+  
+  .match-summoner-spells{
+    display: flex;
+    flex-direction: column;
+  
+    img{
+      width: 48px;
+    }
+  
+    .lower-spell{
+      margin-top: 8px;
+    }
+  }
+}
+
+.match-report-wrapper div{
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+
+  img{
+    width: 38px;
+    margin-right: 4px;
+  }
+
+  .match-trinket{
+    margin-left: 4px;
+  }
+
+  .match-vision-icon{
+    width: 32px;
+  }
+}
+
+.match-report-upper{
+  margin-bottom: 4px;
+}

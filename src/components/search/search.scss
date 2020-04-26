@@ -1,0 +1,38 @@
+#icon-search{
+  width: 24px;
+}
+
+#search-wrapper{
+  // background-color: green;
+  display: flex;
+  justify-content: space-between;
+  padding: 0 20%;
+  height: 64px;
+  margin-bottom: 64px;
+}
+
+#search-input{
+  flex: 1;
+  margin: 0 4px;
+  background-color: $offwhite-light;
+  padding: 0 16px;
+  font-size: 22px;
+}
+
+#search-region, #search-btn{
+  width: 64px;
+  text-align: center;
+  font-size: 16px;
+}
+
+.search-component{
+  background-color: $offwhite-light;
+}
+
+.search-component:hover{
+  background-color: $offwhite-base;
+}
+
+.search-component:active{
+  background-color: $offwhite-hover;
+}

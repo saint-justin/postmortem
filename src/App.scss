@@ -1,0 +1,68 @@
+// All global variable colors and whatnot get declared here
+$bg-blue: #393447;
+$gold-trim: #CBAE46;
+
+$offwhite-light: #EEEEEE;
+$offwhite-base: #E1E1E1;
+$offwhite-hover: #CECECE;
+$offwhite-active: #AEAEAE;
+$text-main: #000 ;
+
+$border-std: 2px solid $gold-trim;
+
+// Font imports here
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,400;0,600;1,300&display=swap');
+
+// Import all other component stylings
+@import './components/search/search.scss';
+@import './components/single-match/single-match.scss';
+
+// App.js specific styling rules here
+*{
+  font-family: 'Open Sans', sans-serif;
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body{
+  background-color: $bg-blue;
+}
+
+#app{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100vh;
+}
+
+#content-wrapper{
+  width: 70%;
+  min-width: 800px;
+  background-color: $offwhite-base;
+  // height: 250px;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+
+  h1{
+    font-family: 'Open Sans', italic;
+    font-style: italic;
+    font-weight: 10;
+    font-size: 64px;
+
+    text-align: center;
+    letter-spacing: 8px;
+
+    display: block;
+    color: $gold-trim;
+    margin: 32px 0;
+  }
+}
+
+.std-border{
+  border: $border-std;
+  border-radius: 3px;
+}
