@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 // import TestForm from './components/test-form/test-form.js'
 import Search from "./components/search/search.js";
 import SingleMatch from "./components/single-match/single-match.js";
+import Map from "./components/map/map.js";
 
 import logo from "./logo.svg";
 import "./App.scss";
@@ -141,7 +142,8 @@ function App() {
         <Search getSummonerInfo={getSummonerInfo} />
         {/* <SingleMatch /> */}
         {matches}
-      </div>
+      </div> 
+      <Map />
     </div>
   );
 }
