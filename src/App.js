@@ -12,6 +12,8 @@ function App() {
   const [summonerHistory, setSummonerHistory] = useState({});
   const [matches, setMatches] = useState([])
   const [champFromId, setChampFromId] = useState();
+  const [perks, setPerks] = useState();
+  const [parentPerks, setParentPerks] = useState();
 
   useEffect(() => {
     async function getChampsFromId() {
@@ -22,7 +24,46 @@ function App() {
       setChampFromId(json);
     }
 
+    async function getPerks() {
+      let url = `http://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/perks.json`;
+      let response = await fetch(url);
+      let json = await response.json();
+
+      let obj = {};
+
+      for (let perk of json) {
+        // console.log(perk.id);
+        obj[perk.id] = perk.name.replace(/ /g, "");
+      }
+
+      console.log("STD PERKS -------------------------")
+      console.log(obj);
+      setPerks(json);
+    }
+
+    async function getPerkRoots() {
+      let url = `http://ddragon.leagueoflegends.com/cdn/10.8.1/data/en_US/runesReforged.json`;
+      let response = await fetch(url);
+      let json = await response.json();
+
+
+      let obj = {};
+      for (let group of json) {
+        let key = group.key;
+
+        for (let subgroup of group.slots[0].runes) {
+          obj[subgroup.key] = key;
+        }
+      }
+
+      console.log("PARENT PERKS ----------------------")
+      console.log(obj);
+      setParentPerks(obj);
+    }
+
     getChampsFromId();
+    getPerks();
+    getPerkRoots();
   }, [])
 
   async function getSummonerInfo(e, summoner, region) {
@@ -32,19 +73,17 @@ function App() {
 
     // TODO: Add regional support ------------------------
     const url = `http://jvaughn.org/postmortem/passthrough_core.php?summoner=${summoner}&dir=_lol_summoner_v4_summoners_by-name_`;
-    console.log(url);
     let response = await fetch(url);
     let json = await response.json();
 
     setSummonerData(json);
-    console.log(json);
 
     getSummonerMatchHistory(json.accountId);
   }
 
   async function getSummonerMatchHistory(accountId) {
     const url = `http://jvaughn.org/postmortem/passthrough_core.php?account_id=${accountId}&dir=_lol_match_v4_matchlists_by-account_`;
-    console.log(`Match history url: ${url}`);
+    // console.log(`Match history url: ${url}`);
     let response = await fetch(url);
     let json = await response.json();
 
@@ -53,11 +92,11 @@ function App() {
 
   async function getSingleMatch(match) {
     const url = `https://jvaughn.org/postmortem/passthrough_core.php?match_id=${match.gameId}&dir=_lol_match_v4_matches_`;
-    console.log(`Single match url: ${url}`);
+    // console.log(`Single match url: ${url}`);
 
     let response = await fetch(url);
     let json = await response.json();
-    console.log(json);
+    // console.log(json);
 
     setMatches(generateSingleMatch(json, match));
   }
@@ -66,11 +105,11 @@ function App() {
   function generateSingleMatch(matchData, generalData) {
     let participantList = {};
     for (let player of matchData.participantIdentities) {
-      console.log(player);
+      // console.log(player);
       participantList[player.participantId] = player.player.summonerName;
     }
-    console.log('Participant list:')
-    console.log(participantList);
+    // console.log('Participant list:')
+    // console.log(participantList);
 
     let data = {};
     data["matchId"] = matchData.gameId;
@@ -131,7 +170,7 @@ function App() {
       2: team2
     }
 
-    return <SingleMatch data={data} champFromId={champFromId} />
+    return <SingleMatch data={data} champFromId={champFromId} perks={perks} parentPerks={parentPerks}/>
   }
 
   return (
@@ -143,7 +182,7 @@ function App() {
         {/* <SingleMatch /> */}
         {matches}
       </div> 
-      <Map />
+      {/* <Map /> */}
     </div>
   );
 }

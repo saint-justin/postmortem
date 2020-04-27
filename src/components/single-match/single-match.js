@@ -17,16 +17,14 @@ const SingleMatch = (props) => {
         "http://raw.communitydragon.org/pbe/plugins/rcp-be-lol-game-data/global/default/data/spells/icons2d/summoner_exhaust.png",
     },
     runes: {
-      keystone:
-        "https://ddragon.leagueoflegends.com/cdn/img/perk-images/Styles/Domination/Electrocute/Electrocute.png",
-      secondary:
-        "https://ddragon.leagueoflegends.com/cdn/img/perk-images/Styles/7203_Whimsy.png",
+      keystone: formatKeystone(props.data.runes.keystone),
+      secondary: formatSecondaryPerk(props.data.runes.secondary),
     },
     items: formatItemLinks(props.data.items),
     trinket: "https://ddragon.leagueoflegends.com/cdn/10.8.1/img/item/3364.png",
     myStats: props.data.myStats,
     teams: props.data.teams,
-    win: props.data.win   //TODO: Check up on this
+    win: props.data.win, //TODO: Check up on this
   });
 
   function generateItems(items) {
@@ -44,15 +42,18 @@ const SingleMatch = (props) => {
 
   function formatItemLinks(items) {
     let arr = [];
-    for (let i = 0; i < items.length; i++){
-      arr.push(`http://ddragon.leagueoflegends.com/cdn/10.8.1/img/item/${items[i]}.png`)
+    for (let i = 0; i < items.length; i++) {
+      arr.push(
+        `http://ddragon.leagueoflegends.com/cdn/10.8.1/img/item/${items[i]}.png`
+      );
     }
     return arr;
   }
 
-  function formatChampIcon(champId){
-    return `http://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/${champId}.png`
+  function formatChampIcon(champId) {
+    return `http://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/${champId}.png`;
   }
+
   function formatNumber(num) {
     return num.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,");
   }
@@ -60,7 +61,7 @@ const SingleMatch = (props) => {
   function formatTeam(players, teamNumber) {
     let playerJsx = [];
     for (let i = 0; i < players.length; i++) {
-      console.log(players[i].champion)
+      // console.log(players[i].champion)
       playerJsx.push(
         <div key={`match_${state.matchId}_team_${teamNumber}_player_${i}`}>
           <img src={formatChampIcon(players[i].champion)}></img>
@@ -68,13 +69,44 @@ const SingleMatch = (props) => {
         </div>
       );
     }
-    return <div className={`${teamNumber === 0 ? 'match-report-blue' : 'match-report-red'} match-report-team`}>{playerJsx}</div>
+    return (
+      <div
+        className={`${
+          teamNumber === 0 ? "match-report-blue" : "match-report-red"
+        } match-report-team`}
+      >
+        {playerJsx}
+      </div>
+    );
+  }
+
+  function formatSecondaryPerk(perkNumber) {
+    return `https://people.rit.edu/jtv6445/etcHosting/perks/${(
+      parseInt(perkNumber) - 1000
+    ).toString()}.png`;
+  }
+
+  function formatKeystone(keystoneId) {
+    // state.runes.keystone
+    const baseUrl =
+      "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/perk-images/styles/";
+    console.log("PROPS PERKS -----------");
+    console.log(props.perks);
+    let perk = props.perks[keystoneId];
+    let parent = props.parentPerks[perk];
+    console.log(keystoneId);
+    let fillerUrl = `/${parent}/${perk}/${perk}.png`;
+    return baseUrl + fillerUrl;
   }
 
   return (
     <div className="match-wrapper">
       <div className="match-container std-border">
-        <div className={`success-indicator right-border ${ state.win ? 'success-true' : 'success-false'}`}></div>{" "}
+        <div
+          className={`success-indicator right-border ${
+            state.win ? "success-true" : "success-false"
+          }`}
+        ></div>{" "}
         {/* Indicator of win or loss, changes to red or green or grey on remake */}
         <img className="champ-icon std-border" src={state.champIcon}></img>
         <div className="match-chosen-spells">
