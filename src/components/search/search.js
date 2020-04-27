@@ -4,7 +4,6 @@ import React, { useState } from "react";
 import IconSearch from "../../media/svg/search-solid.svg";
 
 const Search = (props) => {
-  // Hooks
   const [summoner, setSummoner] = useState("");
   // const [region, setRegion] = useState('NA1');   // TODO: Implement regional control
 

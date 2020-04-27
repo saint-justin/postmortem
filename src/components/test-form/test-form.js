@@ -5,7 +5,6 @@ const TestForm = (props) => {
   const [userData, setUserData] = useState('No user data');
   const [matchData, setMatchData] = useState('No match data');
   const [recentGames, setRecentGames] = useState('');
-  // const [matchHTML
 
   const BASE_URL = `https://people.rit.edu/jtv6445/330/projects/p3/`;
 
@@ -24,8 +23,6 @@ const TestForm = (props) => {
   }
 
   async function getMatchHistory(accountId) {
-    // e.preventDefault(); 
-
     let searchURL = `${BASE_URL}match_passthrough.php?id=${accountId}`;
     let response = await fetch(searchURL);
     let data = await response.json();

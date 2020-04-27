@@ -15,6 +15,7 @@ $border-std: 2px solid $gold-trim;
 
 // Import all other component stylings
 @import './components/search/search.scss';
+@import './components/map/map.scss';
 @import './components/single-match/single-match.scss';
 
 // App.js specific styling rules here
@@ -41,7 +42,6 @@ body{
   width: 70%;
   min-width: 800px;
   background-color: $offwhite-base;
-  // height: 250px;
 
   display: flex;
   flex-direction: column;
@@ -65,4 +65,8 @@ body{
 .std-border{
   border: $border-std;
   border-radius: 3px;
+}
+
+.right-border{
+  border-right: 2px solid $gold-trim; 
 }

@@ -1,5 +1,4 @@
 .match-wrapper{
-  // background-color: blue;
   width: 100%;
   height: 17vh;
   padding: 0 64px;
@@ -11,11 +10,19 @@
   display: flex;
   flex-direction: row;
   align-items: center;
+  justify-content: space-between;
 
   .success-indicator{
-    background-color: grey;
     height: 17vh;
     width: 32px;
+  }
+
+  .success-true{
+    background-color: #77E444;
+  }
+  
+  .success-false{
+    background-color: #E46144;
   }
 
   .champ-icon{
@@ -44,9 +51,6 @@
     width: 32px;
     background-color: black;
     border-radius: 50%;
-    // position: relative;
-    // left: -10;
-    // top: 0;
     display: float;
     margin-left: -30%;
     margin-bottom: -45%;
@@ -67,15 +71,24 @@
   }
 }
 
-.match-report-wrapper div{
+.match-report-wrapper{
   display: flex;
   flex-direction: row;
-  justify-content: space-between;
   align-items: center;
+
+  div{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    width: 126px;
+    flex-wrap: wrap;
+  }
+
 
   img{
     width: 38px;
-    margin-right: 4px;
+    height: 38px;
   }
 
   .match-trinket{
@@ -87,6 +100,75 @@
   }
 }
 
-.match-report-upper{
-  margin-bottom: 4px;
+.match-item{
+  margin-right: 4px;
+}
+.match-item-4, .match-item-5, .match-item-6{
+  margin-top: 4px;
+}
+
+.match-report-stats{
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    text-align: right;
+
+    .match-report-kda, .match-report-column *{
+      margin-bottom: 6px;
+    }
+
+    .match-report-side-by-side{
+      display: flex;
+      flex-direction: row;
+    
+      .match-report-stat-icons{
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        
+        img{
+          margin: 0 0 10px 6px;
+        }
+    
+        .stat-icon-eye{
+          width: 65%;
+        }
+      }
+    }
+}
+
+
+.match-report-team{
+  margin-left: 8px;
+}
+
+.match-report-divider{
+  margin: 0 12px 0 20px;
+  height: 60%;
+}
+
+.match-report-players{
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  margin-right: 16px;
+
+  .match-report-team{
+    display: flex;
+    flex-direction: column;
+
+    div{
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      margin-bottom: 4px;
+    }
+
+    img{
+      width: 24px;
+      margin-right: 6px;
+      border-radius: 50%;
+    }
+  }
 }
