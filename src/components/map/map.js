@@ -1,5 +1,11 @@
+<<<<<<< HEAD
 import React, { useState, useEffect } from 'react';
 import LoLMap from "../../media/lol-map.png";
+=======
+import React, { useState } from 'react';
+import IconPath from "../../media/svg/search-solid.svg";
+
+>>>>>>> 646c8b2c2c036168e65484f3d902fbde964c5a71
 
 /*const Map = (props) => {
   // Any functions or state can go here
@@ -32,8 +38,13 @@ import LoLMap from "../../media/lol-map.png";
       <button onClick={(e) => {setMyNumber(myNumber+1)}}>
         click me
       </button>
+<<<<<<< HEAD
       <canvas ref="canvas" width={300} height={250}></canvas>
       <img ref="image" src={LoLMap} style="hidden"></img>
+=======
+
+      <img src={IconPath}></img>
+>>>>>>> 646c8b2c2c036168e65484f3d902fbde964c5a71
     </div>
   )
 }*/
