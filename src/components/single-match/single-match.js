@@ -17,16 +17,14 @@ const SingleMatch = (props) => {
         "http://raw.communitydragon.org/pbe/plugins/rcp-be-lol-game-data/global/default/data/spells/icons2d/summoner_exhaust.png",
     },
     runes: {
-      keystone:
-        "https://ddragon.leagueoflegends.com/cdn/img/perk-images/Styles/Domination/Electrocute/Electrocute.png",
-      secondary:
-        "https://ddragon.leagueoflegends.com/cdn/img/perk-images/Styles/7203_Whimsy.png",
+      keystone: formatPerks(props.data.runes.keystone),
+      secondary: formetPerkType(props.data.runes.secondary),
     },
     items: formatItemLinks(props.data.items),
     trinket: "https://ddragon.leagueoflegends.com/cdn/10.8.1/img/item/3364.png",
     myStats: props.data.myStats,
     teams: props.data.teams,
-    win: props.data.win   //TODO: Check up on this
+    win: props.data.win, //TODO: Check up on this
   });
 
   function generateItems(items) {
@@ -37,66 +35,100 @@ const SingleMatch = (props) => {
           className={`match-item match-item-${i + 1}`}
           src={items[i] ? items[i] : ""}
           key={`match_${state.matchId}_item_${i}`}
+          alt='Item Icon'
         ></img>
       );
     return <>{itemJsx}</>;
   }
 
+  // Formats all of the links for items
   function formatItemLinks(items) {
     let arr = [];
-    for (let i = 0; i < items.length; i++){
-      arr.push(`http://ddragon.leagueoflegends.com/cdn/10.8.1/img/item/${items[i]}.png`)
+    for (let i = 0; i < items.length; i++) {
+      items[i] !== undefined ? arr.push(`http://ddragon.leagueoflegends.com/cdn/10.8.1/img/item/${items[i]}.png`) : arr.push(undefined);
     }
     return arr;
   }
 
-  function formatChampIcon(champId){
-    return `http://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/${champId}.png`
+  // Appends a given champion id onto the url for champion icons 
+  function formatChampIcon(champId) {
+    return `http://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/${champId}.png`;
   }
+
+  // Reformats how the amount of gold is displayed by adding commas (ex 10201 => 10,201)
   function formatNumber(num) {
     return num.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,");
   }
 
+  // Takes in a set of players and turns them into a team div for the match
   function formatTeam(players, teamNumber) {
     let playerJsx = [];
     for (let i = 0; i < players.length; i++) {
-      console.log(players[i].champion)
       playerJsx.push(
         <div key={`match_${state.matchId}_team_${teamNumber}_player_${i}`}>
-          <img src={formatChampIcon(players[i].champion)}></img>
+          <img src={formatChampIcon(players[i].champion)} alt='Champion Icon'></img>
           <p>{players[i].name}</p>
         </div>
       );
     }
-    return <div className={`${teamNumber === 0 ? 'match-report-blue' : 'match-report-red'} match-report-team`}>{playerJsx}</div>
+    return (
+      <div
+        className={`${
+          teamNumber === 0 ? "match-report-blue" : "match-report-red"
+        } match-report-team`}
+      >
+        {playerJsx}
+      </div>
+    );
+  }
+
+  function formetPerkType(perkId) {
+    return `http://raw.communitydragon.org/9.19/plugins/rcp-be-lol-game-data/global/default/v1/perk-images/styles/${props.parentPerks[perkId]}`;
+
+  }
+
+  function formatPerks(keystoneId) {
+    // example path: http://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/perk-images/styles/domination/darkharvest/darkharvest.png
+    const baseUrl =
+      "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/";
+    let fillerUrl = props.perks[keystoneId];
+    return baseUrl + fillerUrl;
   }
 
   return (
     <div className="match-wrapper">
       <div className="match-container std-border">
-        <div className={`success-indicator right-border ${ state.win ? 'success-true' : 'success-false'}`}></div>{" "}
+        <div
+          className={`success-indicator right-border ${
+            state.win ? "success-true" : "success-false"
+          }`}
+        ></div>{" "}
         {/* Indicator of win or loss, changes to red or green or grey on remake */}
-        <img className="champ-icon std-border" src={state.champIcon}></img>
+        <img className="champ-icon std-border" src={state.champIcon} alt='Champion Icon'></img>
         <div className="match-chosen-spells">
           <div className="match-summoner-spells">
             {/* Source for all summ icons http://raw.communitydragon.org/pbe/plugins/rcp-be-lol-game-data/global/default/data/spells/icons2d/ */}
             <img
               className="match-summoner-spell upper-spell std-border"
               src={state.summonerSpells.upper}
+              alt='Summoner Spell One'
             ></img>
             <img
               className="match-summoner-spell lower-spell std-border"
               src={state.summonerSpells.lower}
+              alt='Summoner Spell Two'
             ></img>
           </div>
           <div className="match-masteries">
             <img
               className="match-keystone std-border"
               src={state.runes.keystone}
+              alt='Keystone Rune'
             ></img>
             <img
               className="match-secondary std-border"
               src={state.runes.secondary}
+              alt='Secondary Rune Tree'
             ></img>
           </div>
         </div>
@@ -105,6 +137,7 @@ const SingleMatch = (props) => {
           <img
             className="match-report-trinket"
             src={state.trinket ? state.trinket : null}
+            alt='Trinket Type'
           ></img>
         </div>
         <div className="match-report-stats">
@@ -118,11 +151,12 @@ const SingleMatch = (props) => {
               <p>{state.myStats.vision}</p>
             </div>
             <div className="match-report-stat-icons">
-              <img src={IconGold}></img>
-              <img src={IconMinion}></img>
+              <img src={IconGold} alt='Gold Icon'></img>
+              <img src={IconMinion} alt='Creep Score Icon'></img>
               <img
                 src={IconEye}
                 className="stat-icon-eye match-report-column"
+                alt='Vision Score Icon'
               ></img>
             </div>
           </div>
