@@ -12,8 +12,9 @@ function App() {
   // const [summonerHistory, setSummonerHistory] = useState({});
   const [matches, setMatches] = useState([]);
   const [champFromId, setChampFromId] = useState();
-  const [genericPerks, setGenericPerks] = useState();
-  const [parentPerks, setParentPerks] = useState();
+  let genericPerks, parentPerks;
+  // const [genericPerks, setGenericPerks] = useState();
+  // const [parentPerks, setParentPerks] = useState();
 
   useEffect(() => {
     async function getChampsFromId() {
@@ -39,7 +40,7 @@ function App() {
         obj[perk.id] = fixedIconPath.join('/').toLowerCase();
       }
 
-      setGenericPerks(obj);
+      genericPerks = obj;
     }
 
     async function getPerkRoots() {
@@ -52,7 +53,7 @@ function App() {
         let path = type.iconPath.split('/').pop().toLowerCase();
         obj[type.id] = path;
       }
-      setParentPerks(obj);
+      parentPerks = obj;
     }
 
     getChampsFromId();
@@ -81,10 +82,12 @@ function App() {
  
     let generatedMatches = [];
     for (let i = 0; i < 10; i++){
-      matches.push(await getSingleMatch(json.matches[i]));
+      matches.push(getSingleMatch(json.matches[i]));
     }
     console.log('Match Array: ');
     console.log(matches);
+    console.log('Generated Array: ');
+    console.log(generatedMatches);
     setMatches(generatedMatches);
   }
 
@@ -185,11 +188,6 @@ function App() {
         key={`match_${matchData.gameId}`}
       ></SingleMatch>
     );
-  }
-
-  function displayMatches(matchArr) {
-    console.log('beep')
-    return <>{matchArr}</>;
   }
 
   return (
