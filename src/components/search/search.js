@@ -50,7 +50,7 @@ const Search = (props) => {
           props.getSummonerInfo(e, summoner);
         }}
       >
-        <img src={IconSearch} id="icon-search"></img>
+        <img src={IconSearch} id="icon-search" alt='search icon'></img>
       </button>
     </div>
   );
