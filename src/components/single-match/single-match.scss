@@ -38,6 +38,7 @@
   .match-masteries{
     display: flex;
     align-items: center;
+    width: 55px;
   }
 
   .match-keystone{
@@ -86,9 +87,11 @@
   }
 
 
-  img{
-    width: 38px;
-    height: 38px;
+  img, .pretend-img{
+    min-width: 38px;
+    max-width: 38px;
+    min-height: 38px;
+    max-height: 38px;
   }
 
   .match-trinket{
@@ -102,6 +105,8 @@
 
 .match-item{
   margin-right: 4px;
+  background-color: #222;
+  border-radius: 4px;
 }
 .match-item-4, .match-item-5, .match-item-6{
   margin-top: 4px;
@@ -141,10 +146,13 @@
 
 .match-report-team{
   margin-left: 8px;
+  width: 140px;
+  font-family: 'Open Sans Condensed', sans-serif;
+  font-size: 10pt;
 }
 
 .match-report-divider{
-  margin: 0 12px 0 20px;
+  margin: 0 12px 0 2px;
   height: 60%;
 }
 

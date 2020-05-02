@@ -4,17 +4,16 @@ import Search from "./components/search/search.js";
 import SingleMatch from "./components/single-match/single-match.js";
 import Map from "./components/map/map.js";
 
-import logo from "./logo.svg";
+import loadingWheel from "./media/png/arrow.png";
 import "./App.scss";
 
 function App() {
-  const [summonerData, setSummonerData] = useState({});
-  // const [summonerHistory, setSummonerHistory] = useState({});
-  const [matches, setMatches] = useState([]);
+  // const [summonerData, setSummonerData] = useState({});
+  const [matches, setMatches] = useState();
   const [champFromId, setChampFromId] = useState();
-  let genericPerks, parentPerks;
-  // const [genericPerks, setGenericPerks] = useState();
-  // const [parentPerks, setParentPerks] = useState();
+  const [loading, setLoading] = useState(false);
+  const [genericPerks, setGenericPerks] = useState();
+  const [parentPerks, setParentPerks] = useState();
 
   useEffect(() => {
     async function getChampsFromId() {
@@ -34,13 +33,12 @@ function App() {
 
       // Reformat the end url that they gave us as the json file we're using is out of date but still helpful
       for (let perk of json) {
-        let fixedIconPath = perk.iconPath.split('/');
-        for (let i = 0; i < 4; i++)
-         fixedIconPath.shift();
-        obj[perk.id] = fixedIconPath.join('/').toLowerCase();
+        let fixedIconPath = perk.iconPath.split("/");
+        for (let i = 0; i < 4; i++) fixedIconPath.shift();
+        obj[perk.id] = fixedIconPath.join("/").toLowerCase();
       }
 
-      genericPerks = obj;
+      setGenericPerks(obj);
     }
 
     async function getPerkRoots() {
@@ -50,11 +48,12 @@ function App() {
 
       let obj = {};
       for (let type of json.styles) {
-        let path = type.iconPath.split('/').pop().toLowerCase();
+        let path = type.iconPath.split("/").pop().toLowerCase();
         obj[type.id] = path;
       }
-      parentPerks = obj;
+      setParentPerks(obj);
     }
+
 
     getChampsFromId();
     getPerks();
@@ -63,14 +62,12 @@ function App() {
 
   async function getSummonerInfo(e, summoner, region) {
     e.preventDefault();
-
+    setLoading(true);
 
     // TODO: Add regional support ------------------------
     const url = `http://jvaughn.org/postmortem/passthrough_core.php?summoner=${summoner}&dir=_lol_summoner_v4_summoners_by-name_`;
     let response = await fetch(url);
     let json = await response.json();
-
-    setSummonerData(json);
 
     getSummonerMatchHistory(json.accountId);
   }
@@ -79,58 +76,60 @@ function App() {
     const url = `http://jvaughn.org/postmortem/passthrough_core.php?account_id=${accountId}&dir=_lol_match_v4_matchlists_by-account_`;
     let response = await fetch(url);
     let json = await response.json();
- 
+
     let generatedMatches = [];
-    for (let i = 0; i < 10; i++){
-      matches.push(getSingleMatch(json.matches[i]));
+    console.log(json.matches[0]);
+    for (let i = 0; i < 10; i++) {
+      generatedMatches.push(await getSingleMatch(json.matches[i], accountId));
     }
-    console.log('Match Array: ');
-    console.log(matches);
-    console.log('Generated Array: ');
-    console.log(generatedMatches);
-    setMatches(generatedMatches);
+
+    let allGeneratedMatches = await Promise.all(generatedMatches);
+    // console.log('Generated Array: ');
+    // console.log(allGeneratedMatches); // Currently promises which don't get rendered successfully
+
+    setMatches(allGeneratedMatches);
+    setLoading(false);
   }
 
-  async function getSingleMatch(match) {
+  async function getSingleMatch(match, accountId) {
     const url = `https://jvaughn.org/postmortem/passthrough_core.php?match_id=${match.gameId}&dir=_lol_match_v4_matches_`;
-
     let response = await fetch(url);
     let json = await response.json();
-
-    let generatedMatch = await generateSingleMatch(json, match);
-    // console.log('MATCHES ------------------');
-    // console.log(matches);
-    // console.log('GENERATED MATCH ----------');
-    // console.log(generatedMatch);
-    // let matchList = [...matches, generatedMatch];
-    // matchList.push(generatedMatch);
-    // console.log(matchList);
-    // let matchList = JSON.parse(JSON.stringify(matches));
-    // matchList.push(generatedMatch);
-    // setMatches([...matches, generatedMatch]);
-    // let newMatchCopy = matches;
-    // newMatchCopy.push(generatedMatch);
-    // setMatches(matches);
-    // console.log(matches);
+    // console.log(url);
+    let generatedMatch = await generateSingleMatch(json, match, accountId);
     return generatedMatch;
   }
 
   // Match generation from the info that we pulled -----------------------------
-  function generateSingleMatch(matchData, generalData) {
+  function generateSingleMatch(matchData, generalData, accountId) {
     let participantList = {};
     for (let player of matchData.participantIdentities) {
       participantList[player.participantId] = player.player.summonerName;
     }
 
+    // console.log(matchData);
+
     let data = {};
     data["matchId"] = matchData.gameId;
     data["champion"] = generalData.champion;
 
-    let playerInfo;
-    for (let i = 0; i < matchData.participants.length; i++) {
-      if (matchData.participants[i].championId === generalData.champion)
-        playerInfo = matchData.participants[i];
+    let playerInfo, playerId;
+
+    // Get the participantId of the person who searched to get their data
+    for (let participant of matchData.participantIdentities) {
+      if (participant.player.accountId === accountId) {
+        playerId = participant.participantId;
+      }
     }
+
+    // Update to pull from playerData
+    for (let participant of matchData.participants) {
+      if (participant.participantId === playerId) {
+        playerInfo = participant;
+      }
+    }
+
+    // Pull all of the stats neccesary from the game to populate our SingleMatch component
     let stats = playerInfo.stats;
 
     data["summonerSpells"] = {
@@ -179,6 +178,9 @@ function App() {
       2: team2,
     };
 
+    data["win"] = playerInfo.stats.win;
+
+    // return the SingleMatch component with the data collected
     return (
       <SingleMatch
         data={data}
@@ -192,15 +194,17 @@ function App() {
 
   return (
     <div className="App" id="app">
-      {/* <TestForm /> */}
       <div id="content-wrapper" className="std-border">
         <h1>POSTMORTEM</h1>
         <Search getSummonerInfo={getSummonerInfo} />
-        {/* <SingleMatch /> */}
-        {<>{matches}</>}
-        {/* {displayMatches(matches)} */}
+        {loading && (
+          <div id="loading-bar">
+            <p>Sit tight while we load your matches...</p>
+            <img id="loading-wheel" src={loadingWheel} alt="Loading..."></img>
+          </div>
+        )}
+        {matches && <div id="match-container">{matches}</div>}
       </div>
-      {/* <Map /> */}
     </div>
   );
 }

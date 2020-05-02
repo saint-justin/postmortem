@@ -29,7 +29,13 @@ const SingleMatch = (props) => {
 
   function generateItems(items) {
     let itemJsx = [];
+    console.log(items);
     for (let i = 0; i < 6; i++)
+      if (items[i] === 'div') {
+        itemJsx.push(
+          <div className={`match-item match-item-${i+1} pretend-img`}></div>
+        )
+      } else {
       itemJsx.push(
         <img
           className={`match-item match-item-${i + 1}`}
@@ -37,15 +43,16 @@ const SingleMatch = (props) => {
           key={`match_${state.matchId}_item_${i}`}
           alt='Item Icon'
         ></img>
-      );
+        );
+      }
     return <>{itemJsx}</>;
   }
 
   // Formats all of the links for items
-  function formatItemLinks(items) {
+  function formatItemLinks(itemIds) {
     let arr = [];
-    for (let i = 0; i < items.length; i++) {
-      items[i] !== undefined ? arr.push(`http://ddragon.leagueoflegends.com/cdn/10.8.1/img/item/${items[i]}.png`) : arr.push(undefined);
+    for (let i = 0; i < itemIds.length; i++) {
+      itemIds[i] !== 0 ? arr.push(`http://ddragon.leagueoflegends.com/cdn/10.8.1/img/item/${itemIds[i]}.png`) : arr.push('div');
     }
     return arr;
   }
@@ -60,6 +67,14 @@ const SingleMatch = (props) => {
     return num.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,");
   }
 
+  // Max out player name's at 14 characters and replace the rest with '...'
+  function formatPlayerName(name) {
+    if(name.length >= 14)
+      return `${name.substring(0, 13)}...`
+    
+    return name;
+  }
+
   // Takes in a set of players and turns them into a team div for the match
   function formatTeam(players, teamNumber) {
     let playerJsx = [];
@@ -67,15 +82,13 @@ const SingleMatch = (props) => {
       playerJsx.push(
         <div key={`match_${state.matchId}_team_${teamNumber}_player_${i}`}>
           <img src={formatChampIcon(players[i].champion)} alt='Champion Icon'></img>
-          <p>{players[i].name}</p>
+          <p>{formatPlayerName(players[i].name)}</p>
         </div>
       );
     }
     return (
       <div
-        className={`${
-          teamNumber === 0 ? "match-report-blue" : "match-report-red"
-        } match-report-team`}
+        className={`${ teamNumber === 0 ? "match-report-blue" : "match-report-red" } match-report-team`}
       >
         {playerJsx}
       </div>
@@ -95,6 +108,8 @@ const SingleMatch = (props) => {
     return baseUrl + fillerUrl;
   }
 
+
+  // TODO: Consider breaking this down into multiple subcomponents
   return (
     <div className="match-wrapper">
       <div className="match-container std-border">
