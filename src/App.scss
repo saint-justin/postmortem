@@ -12,6 +12,7 @@ $border-std: 2px solid $gold-trim;
 
 // Font imports here
 @import url('https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,400;0,600;1,300&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans+Condensed:wght@300&display=swap');
 
 // Import all other component stylings
 @import './components/search/search.scss';
@@ -30,12 +31,20 @@ body{
   background-color: $bg-blue;
 }
 
+#root{
+  display: flex;
+}
+
 #app{
   display: flex;
   justify-content: center;
   align-items: center;
   width: 100%;
   height: 100vh;
+}
+
+#match-container{
+  margin-bottom: 4vh;
 }
 
 #content-wrapper{
@@ -46,6 +55,7 @@ body{
   display: flex;
   flex-direction: column;
   justify-content: center;
+  margin: 15vh 0; 
 
   h1{
     font-family: 'Open Sans', italic;
@@ -69,4 +79,32 @@ body{
 
 .right-border{
   border-right: 2px solid $gold-trim; 
+}
+
+#loading-bar{
+  display: flex;
+  flex-direction: row;
+  margin: auto;
+  margin-bottom: 4vh;
+  align-content: center;
+
+  img{
+    margin-left: 5px;
+  }
+}
+
+#loading-wheel{
+  width: 32px;
+  height: 32px;
+
+  animation: rotation 2s infinite linear;
+}
+
+@keyframes rotation {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(359deg);
+  }
 }
