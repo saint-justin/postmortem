@@ -15,7 +15,7 @@ const SingleMatch = (props) => {
       secondary: formetPerkType(props.data.runes.secondary),
     },
     items: formatItemLinks(props.data.items),
-    trinket: "https://ddragon.leagueoflegends.com/cdn/10.8.1/img/item/3364.png",
+    trinket: formatSingleItem(props.data.items[6]),
     myStats: props.data.myStats,
     teams: props.data.teams,
     win: props.data.win, //TODO: Check up on this
@@ -48,9 +48,13 @@ const SingleMatch = (props) => {
   function formatItemLinks(itemIds) {
     let arr = [];
     for (let i = 0; i < itemIds.length; i++) {
-      itemIds[i] !== 0 ? arr.push(`http://ddragon.leagueoflegends.com/cdn/10.8.1/img/item/${itemIds[i]}.png`) : arr.push('div');
+      arr.push(formatSingleItem(itemIds[i]));
     }
     return arr;
+  }
+
+  function formatSingleItem(itemId) {
+    return itemId !== 0 ? `http://ddragon.leagueoflegends.com/cdn/10.8.1/img/item/${itemId}.png` : 'div';
   }
 
   // Appends a given champion id onto the url for champion icons 
@@ -151,7 +155,7 @@ const SingleMatch = (props) => {
           <div className="match-report-items">{generateItems(state.items)}</div>
           <img
             className="match-report-trinket"
-            src={state.trinket ? state.trinket : null}
+            src={state.trinket}
             alt='Trinket Type'
           ></img>
         </div>
