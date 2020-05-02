@@ -1,11 +1,7 @@
-<<<<<<< HEAD
 import React, { useState, useEffect } from 'react';
-import LoLMap from "../../media/lol-map.png";
-=======
-import React, { useState } from 'react';
+import LoLMap from "../../media/png/lol-map.png";
 import IconPath from "../../media/svg/search-solid.svg";
 
->>>>>>> 646c8b2c2c036168e65484f3d902fbde964c5a71
 
 /*const Map = (props) => {
   // Any functions or state can go here
@@ -38,26 +34,25 @@ import IconPath from "../../media/svg/search-solid.svg";
       <button onClick={(e) => {setMyNumber(myNumber+1)}}>
         click me
       </button>
-<<<<<<< HEAD
       <canvas ref="canvas" width={300} height={250}></canvas>
       <img ref="image" src={LoLMap} style="hidden"></img>
-=======
-
-      <img src={IconPath}></img>
->>>>>>> 646c8b2c2c036168e65484f3d902fbde964c5a71
     </div>
   )
 }*/
 
 class Map extends React.Component {
-  
+
+  constructor(deaths) {
+    this.deaths = deaths; // Array of death locations
+  }
+
   componentDidMount() {
-    const canvas = this.refs.canvas
-    const ctx = canvas.getContext("2d")
-    const img = this.refs.image
+    this.canvas = this.refs.canvas
+    this.ctx = this.canvas.getContext("2d")
+    this.img = this.refs.image
     
-    img.onload = () => {
-      ctx.drawImage(img, 0, 0)
+    this.img.onload = () => {
+      this.ctx.drawImage(this.img, 0, 0)
       // ctx.font = "40px Courier"
       // ctx.fillText(this.props.text, 210, 75)
     }
@@ -65,12 +60,27 @@ class Map extends React.Component {
 
   updateDrawing(drawType) {
     if(drawType == "kills") {
-      console.log("kills button clicked!");
+      // for (const [index, value] of deaths.entries()) {
+        this.drawMarker(6000, 6000, drawType);
+      // }
     } else if(drawType == "wards") {
       console.log("wards button clicked!");
     } else {
       console.log("unknown button clicked?");
     }
+  }
+
+  drawMarker(xPos, yPos, drawType) {
+    // The arena is roughly 160m on each side, and 1 cm per unit
+    const xPercent = xPos / 16000;
+    const yPercent = yPos / 16000;
+    this.ctx.save();
+    this.ctx.fillStyle = "#FFF";
+    this.ctx.beginPath();
+    this.ctx.arc(xPercent * 400, yPercent * 285, 10, 0, Math.PI * 2, false);
+    this.ctx.closePath();
+    this.ctx.fill();
+    this.ctx.restore();
   }
 
   render() {
