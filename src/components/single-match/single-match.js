@@ -108,6 +108,8 @@ const SingleMatch = (props) => {
     return baseUrl + fillerUrl;
   }
 
+
+  // TODO: Consider breaking this down into multiple subcomponents
   return (
     <div className="match-wrapper">
       <div className="match-container std-border">

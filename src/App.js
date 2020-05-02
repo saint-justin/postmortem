@@ -5,7 +5,6 @@ import SingleMatch from "./components/single-match/single-match.js";
 import Map from "./components/map/map.js";
 
 import loadingWheel from "./media/png/arrow.png";
-import logo from "./logo.svg";
 import "./App.scss";
 
 function App() {
@@ -55,12 +54,10 @@ function App() {
       setParentPerks(obj);
     }
 
+
     getChampsFromId();
     getPerks();
     getPerkRoots();
-    console.log("Functions run...");
-    console.log("Perks:");
-    console.log(genericPerks);
   }, []);
 
   async function getSummonerInfo(e, summoner, region) {
