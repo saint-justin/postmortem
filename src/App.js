@@ -8,8 +8,8 @@ import loadingWheel from "./media/png/arrow.png";
 import "./App.scss";
 
 function App() {
-  // const [summonerData, setSummonerData] = useState({});
   const [matches, setMatches] = useState();
+  const [spells, setSpells] = useState();
   const [champFromId, setChampFromId] = useState();
   const [loading, setLoading] = useState(false);
   const [genericPerks, setGenericPerks] = useState();
@@ -54,10 +54,25 @@ function App() {
       setParentPerks(obj);
     }
 
+    async function getSummonerSpells() {
+      let url = 'http://ddragon.leagueoflegends.com/cdn/10.9.1/data/en_US/summoner.json';
+      let response = await fetch(url);
+      let json = await response.json();
+      let data = json.data;
+
+      let obj = {};
+      for (let spell in data) {
+        obj[data[spell].key] = data[spell].id;
+      }
+
+      setSpells(obj);
+    }
+
 
     getChampsFromId();
     getPerks();
     getPerkRoots();
+    getSummonerSpells();
   }, []);
 
   async function getSummonerInfo(e, summoner, region) {
@@ -78,14 +93,11 @@ function App() {
     let json = await response.json();
 
     let generatedMatches = [];
-    console.log(json.matches[0]);
     for (let i = 0; i < 10; i++) {
       generatedMatches.push(await getSingleMatch(json.matches[i], accountId));
     }
 
     let allGeneratedMatches = await Promise.all(generatedMatches);
-    // console.log('Generated Array: ');
-    // console.log(allGeneratedMatches); // Currently promises which don't get rendered successfully
 
     setMatches(allGeneratedMatches);
     setLoading(false);
@@ -95,7 +107,6 @@ function App() {
     const url = `https://jvaughn.org/postmortem/passthrough_core.php?match_id=${match.gameId}&dir=_lol_match_v4_matches_`;
     let response = await fetch(url);
     let json = await response.json();
-    // console.log(url);
     let generatedMatch = await generateSingleMatch(json, match, accountId);
     return generatedMatch;
   }
@@ -106,8 +117,6 @@ function App() {
     for (let player of matchData.participantIdentities) {
       participantList[player.participantId] = player.player.summonerName;
     }
-
-    // console.log(matchData);
 
     let data = {};
     data["matchId"] = matchData.gameId;
@@ -133,8 +142,8 @@ function App() {
     let stats = playerInfo.stats;
 
     data["summonerSpells"] = {
-      upper: playerInfo.spell1Id,
-      lower: playerInfo.spell2Id,
+      spell1: playerInfo.spell1Id,
+      spell2: playerInfo.spell2Id,
     };
 
     data["runes"] = {
@@ -187,6 +196,7 @@ function App() {
         champFromId={champFromId}
         perks={genericPerks}
         parentPerks={parentPerks}
+        spells={spells}
         key={`match_${matchData.gameId}`}
       ></SingleMatch>
     );

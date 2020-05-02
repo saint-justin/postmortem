@@ -10,12 +10,6 @@ const SingleMatch = (props) => {
   const [state, setState] = useState({
     matchId: props.data.matchId,
     champIcon: formatChampIcon(props.data.champion),
-    summonerSpells: {
-      upper:
-        "http://raw.communitydragon.org/pbe/plugins/rcp-be-lol-game-data/global/default/data/spells/icons2d/summoner_flash.png",
-      lower:
-        "http://raw.communitydragon.org/pbe/plugins/rcp-be-lol-game-data/global/default/data/spells/icons2d/summoner_exhaust.png",
-    },
     runes: {
       keystone: formatPerks(props.data.runes.keystone),
       secondary: formetPerkType(props.data.runes.secondary),
@@ -110,6 +104,10 @@ const SingleMatch = (props) => {
     return baseUrl + fillerUrl;
   }
 
+  function formatSpells(spellId) {
+    return `http://ddragon.leagueoflegends.com/cdn/10.9.1/img/spell/${props.spells[spellId]}.png`
+  }
+
 
   // TODO: Consider breaking this down into multiple subcomponents
   return (
@@ -124,15 +122,15 @@ const SingleMatch = (props) => {
         <img className="champ-icon std-border" src={state.champIcon} alt='Champion Icon'></img>
         <div className="match-chosen-spells">
           <div className="match-summoner-spells">
-            {/* Source for all summ icons http://raw.communitydragon.org/pbe/plugins/rcp-be-lol-game-data/global/default/data/spells/icons2d/ */}
+            {/* Source for all summ icons http://ddragon.leagueoflegends.com/cdn/10.9.1/img/spell/{spell_name}.png */}
             <img
               className="match-summoner-spell upper-spell std-border"
-              src={state.summonerSpells.upper}
+              src={formatSpells(props.data.summonerSpells.spell1)}
               alt='Summoner Spell One'
             ></img>
             <img
               className="match-summoner-spell lower-spell std-border"
-              src={state.summonerSpells.lower}
+              src={formatSpells(props.data.summonerSpells.spell2)}
               alt='Summoner Spell Two'
             ></img>
           </div>
