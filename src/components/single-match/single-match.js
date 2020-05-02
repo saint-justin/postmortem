@@ -29,11 +29,13 @@ const SingleMatch = (props) => {
 
   function generateItems(items) {
     let itemJsx = [];
-    console.log(items);
     for (let i = 0; i < 6; i++)
       if (items[i] === 'div') {
         itemJsx.push(
-          <div className={`match-item match-item-${i+1} pretend-img`}></div>
+          <div
+            className={`match-item match-item-${i + 1} pretend-img`}
+            key={`match_${state.matchId}_item_${i}`}
+          ></div>
         )
       } else {
       itemJsx.push(
@@ -117,7 +119,7 @@ const SingleMatch = (props) => {
           className={`success-indicator right-border ${
             state.win ? "success-true" : "success-false"
           }`}
-        ></div>{" "}
+        ></div>
         {/* Indicator of win or loss, changes to red or green or grey on remake */}
         <img className="champ-icon std-border" src={state.champIcon} alt='Champion Icon'></img>
         <div className="match-chosen-spells">
