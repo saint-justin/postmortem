@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import Map from '../map/map.js';
 
 import IconEye from "../../media/svg/eye-solid.svg";
 import IconCarrot from "../../media/svg/angle-down-solid.svg";
@@ -19,8 +20,11 @@ const SingleMatch = (props) => {
     trinket: formatSingleItem(props.data.items[6]),
     myStats: props.data.myStats,
     teams: props.data.teams,
-    win: props.data.win, //TODO: Check up on this
+    win: props.data.win, 
   });
+
+  const [expanded, setExpanded] = useState(false);
+  const [expandedInfo, setExpandedInfo] = useState();
 
   function generateItems(items) {
     let itemJsx = [];
@@ -195,9 +199,10 @@ const SingleMatch = (props) => {
           {formatTeam(state.teams[2], 1)}
         </div>
       </div>
-      <div className='expandable'>
+      <div className='expandable' onClick={() => setExpanded(!expanded)}>
+        {expanded && <Map />}
         <img src={IconCarrot} alt="Icon" className="expandable-carrot"></img>
-        <h3 className='expand-text'>See More</h3>
+        <h3 className='expand-text'>See {expanded ? 'less' : 'more'}</h3>
         <img src={IconCarrot} alt="Icon" className="expandable-carrot"></img>
       </div>
     </div>
