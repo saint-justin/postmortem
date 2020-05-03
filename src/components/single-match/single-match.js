@@ -24,7 +24,7 @@ const SingleMatch = (props) => {
   });
 
   const [expanded, setExpanded] = useState(false);
-  const [expandedInfo, setExpandedInfo] = useState();
+  const [timelineInfo, setTimelineInfo] = useState();
 
   function generateItems(items) {
     let itemJsx = [];
@@ -122,6 +122,27 @@ const SingleMatch = (props) => {
     return `http://ddragon.leagueoflegends.com/cdn/10.9.1/img/spell/${props.spells[spellId]}.png`;
   }
 
+  // Timeline work ----------------------------------------------------------------
+  async function getMatchTimeline(matchId) {
+    let url = `http://jvaughn.org/postmortem/passthrough_core.php?match_id=${matchId}&dir=_lol_match_v4_timelines_by-match_`;
+    let response = await fetch(url);
+    let json = await response.json();
+
+    console.log(json);
+
+    return sortTimelineData(json);
+  } 
+
+  function sortTimelineData(data) {
+    let totalKills = [];
+    for (let i = 0; i < data.frames.length; i++){
+      let killsInFrame = data.frames[i].events.filter(e => e.type === 'CHAMPION_KILL');
+      totalKills = [...totalKills, ...killsInFrame];
+    }
+    return totalKills;
+  }
+
+
   // TODO: Consider breaking this down into multiple subcomponents
   return (
     <div className="match-wrapper">
@@ -200,7 +221,7 @@ const SingleMatch = (props) => {
         </div>
       </div>
       <div className='expandable' onClick={() => setExpanded(!expanded)}>
-        {expanded && <Map />}
+        {expanded && <Map timeline={getMatchTimeline(state.matchId)} /> }
         <img src={IconCarrot} alt="Icon" className="expandable-carrot"></img>
         <h3 className='expand-text'>See {expanded ? 'less' : 'more'}</h3>
         <img src={IconCarrot} alt="Icon" className="expandable-carrot"></img>
