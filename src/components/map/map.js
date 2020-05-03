@@ -2,47 +2,10 @@ import React, { useState, useEffect } from 'react';
 import LoLMap from "../../media/png/lol-map.png";
 import IconPath from "../../media/svg/search-solid.svg";
 
-
-/*const Map = (props) => {
-  // Any functions or state can go here
-  const [myNumber, setMyNumber] = useState(0);
-  const [notMyNumber, setNotMyNumber] = useState(-34);
-  const [ctx, setCtx] = useState(null);
-
-  // const []
-  function draw() {
-    ctx = this.refs.canvas;
-
-    ctx.beginPath();
-    ctx.moveTo(0, 0);
-    ctx.lineTo(100, 100);
-    ctx.closePath();
-    ctx.stroke();
-  }
-
-  useEffect(() => {
-    draw();
-  }, []);
-
-  // Instantiate the function as drawing the league map
-  // draw();
-
-  return (
-    <div className='match-map'>
-      {myNumber}
-      {notMyNumber}
-      <button onClick={(e) => {setMyNumber(myNumber+1)}}>
-        click me
-      </button>
-      <canvas ref="canvas" width={300} height={250}></canvas>
-      <img ref="image" src={LoLMap} style="hidden"></img>
-    </div>
-  )
-}*/
-
 class Map extends React.Component {
 
   constructor(deaths) {
+    super();
     this.deaths = deaths; // Array of death locations
   }
 
@@ -52,7 +15,7 @@ class Map extends React.Component {
     this.img = this.refs.image
     
     this.img.onload = () => {
-      this.ctx.drawImage(this.img, 0, 0)
+      this.ctx.drawImage(this.img, -40, 0)
       // ctx.font = "40px Courier"
       // ctx.fillText(this.props.text, 210, 75)
     }
@@ -60,10 +23,13 @@ class Map extends React.Component {
 
   updateDrawing(drawType) {
     if(drawType == "kills") {
+      console.log("kills button clicked!");
+      this.ctx.drawImage(this.img, -40, 0);
       // for (const [index, value] of deaths.entries()) {
-        this.drawMarker(6000, 6000, drawType);
+        this.drawMarker(8000, 8000, drawType);
       // }
     } else if(drawType == "wards") {
+      this.ctx.drawImage(this.img, -40, 0);
       console.log("wards button clicked!");
     } else {
       console.log("unknown button clicked?");
@@ -73,11 +39,11 @@ class Map extends React.Component {
   drawMarker(xPos, yPos, drawType) {
     // The arena is roughly 160m on each side, and 1 cm per unit
     const xPercent = xPos / 16000;
-    const yPercent = yPos / 16000;
+    const yPercent = (16000 - yPos) / 16000;
     this.ctx.save();
     this.ctx.fillStyle = "#FFF";
     this.ctx.beginPath();
-    this.ctx.arc(xPercent * 400, yPercent * 285, 10, 0, Math.PI * 2, false);
+    this.ctx.arc(xPercent * 320, yPercent * 285, 10, 0, Math.PI * 2, false);
     this.ctx.closePath();
     this.ctx.fill();
     this.ctx.restore();
@@ -86,11 +52,12 @@ class Map extends React.Component {
   render() {
     return(
       <div>
-        <canvas ref="canvas" width={400} height={285} />
+        <canvas ref="canvas" width={320} height={285} />
         <img ref="image" src={LoLMap} className="hidden" />
         <div>
-          <button onClick={this.updateDrawing("kills")}>Draw kills</button>
-          <button onClick={this.updateDrawing("wards")}>Draw wards</button>
+          <button onClick={() => this.updateDrawing("kills")}>Draw kills</button>
+          <button onClick={() => this.updateDrawing("wards")}>Draw wards</button>
+          <input type="range" min="1" max="60" value="1" step="1" ref="sliderMins" onChange={() => {console.log("Value changed");}}></input>
         </div>
       </div>
     )
