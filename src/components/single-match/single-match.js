@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from "react";
 
 import IconEye from "../../media/svg/eye-solid.svg";
-import IconGold from "../../media/svg/scoreboardicon_gold.png";
-import IconMinion from "../../media/svg/scoreboardicon_minion.png";
+import IconCarrot from "../../media/svg/angle-down-solid.svg";
 
-import Divider from "../../media/svg/divider.png";
+import IconGold from "../../media/png/scoreboardicon_gold.png";
+import IconMinion from "../../media/png/scoreboardicon_minion.png";
+import Divider from "../../media/png/divider.png";
 
 const SingleMatch = (props) => {
   const [state, setState] = useState({
@@ -24,21 +25,21 @@ const SingleMatch = (props) => {
   function generateItems(items) {
     let itemJsx = [];
     for (let i = 0; i < 6; i++)
-      if (items[i] === 'div') {
+      if (items[i] === "div") {
         itemJsx.push(
           <div
             className={`match-item match-item-${i + 1} pretend-img`}
             key={`match_${state.matchId}_item_${i}`}
           ></div>
-        )
+        );
       } else {
-      itemJsx.push(
-        <img
-          className={`match-item match-item-${i + 1}`}
-          src={items[i] ? items[i] : ""}
-          key={`match_${state.matchId}_item_${i}`}
-          alt='Item Icon'
-        ></img>
+        itemJsx.push(
+          <img
+            className={`match-item match-item-${i + 1}`}
+            src={items[i] ? items[i] : ""}
+            key={`match_${state.matchId}_item_${i}`}
+            alt="Item Icon"
+          ></img>
         );
       }
     return <>{itemJsx}</>;
@@ -54,10 +55,12 @@ const SingleMatch = (props) => {
   }
 
   function formatSingleItem(itemId) {
-    return itemId !== 0 ? `http://ddragon.leagueoflegends.com/cdn/10.8.1/img/item/${itemId}.png` : 'div';
+    return itemId !== 0
+      ? `http://ddragon.leagueoflegends.com/cdn/10.8.1/img/item/${itemId}.png`
+      : "div";
   }
 
-  // Appends a given champion id onto the url for champion icons 
+  // Appends a given champion id onto the url for champion icons
   function formatChampIcon(champId) {
     return `http://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/${champId}.png`;
   }
@@ -69,9 +72,8 @@ const SingleMatch = (props) => {
 
   // Max out player name's at 14 characters and replace the rest with '...'
   function formatPlayerName(name) {
-    if(name.length >= 14)
-      return `${name.substring(0, 13)}...`
-    
+    if (name.length >= 14) return `${name.substring(0, 13)}...`;
+
     return name;
   }
 
@@ -81,14 +83,19 @@ const SingleMatch = (props) => {
     for (let i = 0; i < players.length; i++) {
       playerJsx.push(
         <div key={`match_${state.matchId}_team_${teamNumber}_player_${i}`}>
-          <img src={formatChampIcon(players[i].champion)} alt='Champion Icon'></img>
+          <img
+            src={formatChampIcon(players[i].champion)}
+            alt="Champion Icon"
+          ></img>
           <p>{formatPlayerName(players[i].name)}</p>
         </div>
       );
     }
     return (
       <div
-        className={`${ teamNumber === 0 ? "match-report-blue" : "match-report-red" } match-report-team`}
+        className={`${
+          teamNumber === 0 ? "match-report-blue" : "match-report-red"
+        } match-report-team`}
       >
         {playerJsx}
       </div>
@@ -97,7 +104,6 @@ const SingleMatch = (props) => {
 
   function formetPerkType(perkId) {
     return `http://raw.communitydragon.org/9.19/plugins/rcp-be-lol-game-data/global/default/v1/perk-images/styles/${props.parentPerks[perkId]}`;
-
   }
 
   function formatPerks(keystoneId) {
@@ -109,9 +115,8 @@ const SingleMatch = (props) => {
   }
 
   function formatSpells(spellId) {
-    return `http://ddragon.leagueoflegends.com/cdn/10.9.1/img/spell/${props.spells[spellId]}.png`
+    return `http://ddragon.leagueoflegends.com/cdn/10.9.1/img/spell/${props.spells[spellId]}.png`;
   }
-
 
   // TODO: Consider breaking this down into multiple subcomponents
   return (
@@ -123,31 +128,35 @@ const SingleMatch = (props) => {
           }`}
         ></div>
         {/* Indicator of win or loss, changes to red or green or grey on remake */}
-        <img className="champ-icon std-border" src={state.champIcon} alt='Champion Icon'></img>
+        <img
+          className="champ-icon std-border"
+          src={state.champIcon}
+          alt="Champion Icon"
+        ></img>
         <div className="match-chosen-spells">
           <div className="match-summoner-spells">
             {/* Source for all summ icons http://ddragon.leagueoflegends.com/cdn/10.9.1/img/spell/{spell_name}.png */}
             <img
               className="match-summoner-spell upper-spell std-border"
               src={formatSpells(props.data.summonerSpells.spell1)}
-              alt='Summoner Spell One'
+              alt="Summoner Spell One"
             ></img>
             <img
               className="match-summoner-spell lower-spell std-border"
               src={formatSpells(props.data.summonerSpells.spell2)}
-              alt='Summoner Spell Two'
+              alt="Summoner Spell Two"
             ></img>
           </div>
           <div className="match-masteries">
             <img
               className="match-keystone std-border"
               src={state.runes.keystone}
-              alt='Keystone Rune'
+              alt="Keystone Rune"
             ></img>
             <img
               className="match-secondary std-border"
               src={state.runes.secondary}
-              alt='Secondary Rune Tree'
+              alt="Secondary Rune Tree"
             ></img>
           </div>
         </div>
@@ -156,7 +165,7 @@ const SingleMatch = (props) => {
           <img
             className="match-report-trinket"
             src={state.trinket}
-            alt='Trinket Type'
+            alt="Trinket Type"
           ></img>
         </div>
         <div className="match-report-stats">
@@ -170,12 +179,12 @@ const SingleMatch = (props) => {
               <p>{state.myStats.vision}</p>
             </div>
             <div className="match-report-stat-icons">
-              <img src={IconGold} alt='Gold Icon'></img>
-              <img src={IconMinion} alt='Creep Score Icon'></img>
+              <img src={IconGold} alt="Gold Icon"></img>
+              <img src={IconMinion} alt="Creep Score Icon"></img>
               <img
                 src={IconEye}
                 className="stat-icon-eye match-report-column"
-                alt='Vision Score Icon'
+                alt="Vision Score Icon"
               ></img>
             </div>
           </div>
@@ -185,6 +194,11 @@ const SingleMatch = (props) => {
           <img src={Divider} className="match-report-divider"></img>
           {formatTeam(state.teams[2], 1)}
         </div>
+      </div>
+      <div className='expandable'>
+        <img src={IconCarrot} alt="Icon" className="expandable-carrot"></img>
+        <h3 className='expand-text'>See More</h3>
+        <img src={IconCarrot} alt="Icon" className="expandable-carrot"></img>
       </div>
     </div>
   );

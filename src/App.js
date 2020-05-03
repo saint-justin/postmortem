@@ -93,7 +93,7 @@ function App() {
     let json = await response.json();
 
     let generatedMatches = [];
-    for (let i = 0; i < 10; i++) {
+    for (let i = 0; i < 2; i++) {
       generatedMatches.push(await getSingleMatch(json.matches[i], accountId));
     }
 
