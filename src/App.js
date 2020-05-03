@@ -19,6 +19,7 @@ function App() {
   const [loading, setLoading] = useState(false);
   const [genericPerks, setGenericPerks] = useState();
   const [parentPerks, setParentPerks] = useState();
+  const [rateLimit, setRateLimit] = useState(5);
 
   useEffect(() => {
     async function getChampsFromId() {
@@ -87,6 +88,7 @@ function App() {
   async function getSummonerInfo(e, summoner, region) {
     e.preventDefault();
     setLoading(true);
+    clearMatches();
 
     // TODO: Add regional support ------------------------
     const url = `http://jvaughn.org/postmortem/passthrough_core.php?summoner=${summoner}&dir=_lol_summoner_v4_summoners_by-name_`;
@@ -109,8 +111,8 @@ function App() {
     let json = await response.json();
 
     let generatedMatches = [];
-    for (let i = 0; i < 2; i++) {
-      generatedMatches.push(await getSingleMatch(json.matches[i], accountId));
+    for (let i = 0; i < rateLimit; i++) {
+      generatedMatches.push(getSingleMatch(json.matches[i], accountId));
     }
 
     let allGeneratedMatches = await Promise.all(generatedMatches);
@@ -226,11 +228,19 @@ function App() {
     }).show();
   }
 
+  function clearMatches() {
+    setMatches();
+  }
+
+  function updateRate(number) {
+    setRateLimit(number);
+  }
+
   return (
     <div className="App" id="app">
       <div id="content-wrapper" className="std-border">
         <h1>POSTMORTEM</h1>
-        <Search getSummonerInfo={getSummonerInfo} />
+        <Search getSummonerInfo={getSummonerInfo} clearFunction={clearMatches} updateRate={updateRate} />
         {loading && (
           <div id="loading-bar">
             <p>Sit tight while we load your matches...</p>
