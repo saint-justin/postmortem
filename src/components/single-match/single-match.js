@@ -220,12 +220,12 @@ const SingleMatch = (props) => {
           {formatTeam(state.teams[2], 1)}
         </div>
       </div>
-      <div className='expandable' onClick={() => setExpanded(!expanded)}>
+      {/* <div className='expandable' onClick={() => setExpanded(!expanded)}>     // Revisit in the future and add in expandability
         {expanded && <Map timeline={getMatchTimeline(state.matchId)} /> }
         <img src={IconCarrot} alt="Icon" className="expandable-carrot"></img>
         <h3 className='expand-text'>See {expanded ? 'less' : 'more'}</h3>
         <img src={IconCarrot} alt="Icon" className="expandable-carrot"></img>
-      </div>
+      </div> */}
     </div>
   );
 };

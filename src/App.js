@@ -1,11 +1,16 @@
+// Libraries
 import React, { useState, useEffect } from "react";
-// import TestForm from './components/test-form/test-form.js'
+import Noty from "noty";
+
+// Components
 import Search from "./components/search/search.js";
 import SingleMatch from "./components/single-match/single-match.js";
-import Map from "./components/map/map.js";
 
+// Assets
 import loadingWheel from "./media/png/arrow.png";
 import "./App.scss";
+import "../node_modules/noty/lib/noty.css";  
+import "../node_modules/noty/lib/themes/mint.css";  
 
 function App() {
   const [matches, setMatches] = useState();
@@ -55,7 +60,8 @@ function App() {
     }
 
     async function getSummonerSpells() {
-      let url = 'http://ddragon.leagueoflegends.com/cdn/10.9.1/data/en_US/summoner.json';
+      let url =
+        "http://ddragon.leagueoflegends.com/cdn/10.9.1/data/en_US/summoner.json";
       let response = await fetch(url);
       let json = await response.json();
       let data = json.data;
@@ -68,11 +74,14 @@ function App() {
       setSpells(obj);
     }
 
-
     getChampsFromId();
     getPerks();
     getPerkRoots();
     getSummonerSpells();
+
+    new Noty({
+      text: "Don't play League? Try searching for the name of the pro player 'Dyrus'!"
+    }).show();
   }, []);
 
   async function getSummonerInfo(e, summoner, region) {
@@ -82,9 +91,16 @@ function App() {
     // TODO: Add regional support ------------------------
     const url = `http://jvaughn.org/postmortem/passthrough_core.php?summoner=${summoner}&dir=_lol_summoner_v4_summoners_by-name_`;
     let response = await fetch(url);
+    console.log(response);
     let json = await response.json();
 
-    getSummonerMatchHistory(json.accountId);
+    if (response.status !== 200) {
+      notify(`Error ${response.status}: ${response.message}`);
+    }
+    else {
+      getSummonerMatchHistory(json.accountId);
+    }
+    
   }
 
   async function getSummonerMatchHistory(accountId) {
@@ -202,6 +218,14 @@ function App() {
     );
   }
 
+  // Error handling
+  function notify(_text, _timeout = 2500) {
+    new Noty({
+      text: _text,
+      timeout: _timeout,
+    }).show();
+  }
+
   return (
     <div className="App" id="app">
       <div id="content-wrapper" className="std-border">
@@ -215,7 +239,6 @@ function App() {
         )}
         {matches && <div id="match-container">{matches}</div>}
       </div>
-      <Map></Map>
     </div>
   );
 }

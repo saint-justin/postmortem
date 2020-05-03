@@ -3,6 +3,7 @@
   padding: 0 64px;
   display: flex;
   flex-direction: column;
+  margin-bottom: 4px;
 }
 
 .match-container{
@@ -182,27 +183,27 @@
 }
 
 
-.expandable{
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
-  align-items: center;
-  background-color: $offwhite-light;
-  border: $border-std;
-  border-top: none;
-  margin-bottom: 8px;
+// .expandable{
+//   display: flex;
+//   flex-direction: row;
+//   justify-content: center;
+//   align-items: center;
+//   background-color: $offwhite-light;
+//   border: $border-std;
+//   border-top: none;
+//   margin-bottom: 8px;
 
-  .expandable-carrot{
-    height: 16px;
-  }
+//   .expandable-carrot{
+//     height: 16px;
+//   }
   
-  .expand-text{
-    font-size: 12pt;
-    margin: 4px 6px;
-  }
+//   .expand-text{
+//     font-size: 12pt;
+//     margin: 4px 6px;
+//   }
 
-}
+// }
 
-.expandable:hover{
-  cursor: pointer;
-}
+// .expandable:hover{
+//   cursor: pointer;
+// }
