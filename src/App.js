@@ -205,6 +205,7 @@ function App() {
         )}
         {matches && <div id="match-container">{matches}</div>}
       </div>
+      <Map></Map>
     </div>
   );
 }
