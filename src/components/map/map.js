@@ -4,9 +4,9 @@ import IconPath from "../../media/svg/search-solid.svg";
 
 class Map extends React.Component {
 
-  constructor(deaths) {
-    super();
-    this.deaths = deaths; // Array of death locations
+  constructor(props) {
+    super(props);
+    console.log(props.timeline);
   }
 
   componentDidMount() {
@@ -21,18 +21,13 @@ class Map extends React.Component {
     }
   }
 
-  updateDrawing(drawType) {
-    if(drawType == "kills") {
-      console.log("kills button clicked!");
-      this.ctx.drawImage(this.img, -40, 0);
-      // for (const [index, value] of deaths.entries()) {
-        this.drawMarker(8000, 8000, drawType);
-      // }
-    } else if(drawType == "wards") {
-      this.ctx.drawImage(this.img, -40, 0);
-      console.log("wards button clicked!");
-    } else {
-      console.log("unknown button clicked?");
+  updateDrawing(killEvents, userId) {
+    for(const killEvent of killEvents) {
+      if(killEvent.killerId == userId) {
+        this.drawMarker(killEvent.position.x, killEvent.position.y, "kill");
+      } else if(killEvent.victimId == userId) {
+        this.drawMarker(killEvent.position.x, killEvent.position.y, "death");
+      }
     }
   }
 
@@ -41,9 +36,16 @@ class Map extends React.Component {
     const xPercent = xPos / 16000;
     const yPercent = (16000 - yPos) / 16000;
     this.ctx.save();
-    this.ctx.fillStyle = "#FFF";
+    
+    if(drawType == "kill")
+      this.ctx.fillStyle = "#FFF";
+    else if(drawType == "death")
+      this.ctx.fillStyle = "#888";
+    else
+      this.ctx.fillStyle = "#000";
+
     this.ctx.beginPath();
-    this.ctx.arc(xPercent * 320, yPercent * 285, 10, 0, Math.PI * 2, false);
+    this.ctx.arc(xPercent * this.canvas.width, yPercent * this.canvas.height, 10, 0, Math.PI * 2, false);
     this.ctx.closePath();
     this.ctx.fill();
     this.ctx.restore();
@@ -54,11 +56,6 @@ class Map extends React.Component {
       <div>
         <canvas ref="canvas" width={320} height={285} />
         <img ref="image" src={LoLMap} className="hidden" />
-        <div>
-          <button onClick={() => this.updateDrawing("kills")}>Draw kills</button>
-          <button onClick={() => this.updateDrawing("wards")}>Draw wards</button>
-          <input type="range" min="1" max="60" value="1" step="1" ref="sliderMins" onChange={() => {console.log("Value changed");}}></input>
-        </div>
       </div>
     )
   }
